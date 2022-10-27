@@ -1,0 +1,63 @@
+package general;
+
+import java.io.*;
+import java.util.*;
+
+public class AnagramDeletionProblem {
+
+    /*
+     * Complete the 'makeAnagram' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. STRING a
+     *  2. STRING b
+     *
+     *  a = cde & b = abc
+     *  output = 4
+     * Delete the following characters from the strings make them anagrams:
+     * Remove d and e from cde to get c.
+     * Remove a and b from abc to get c.
+     * It takes  deletions to make both strings anagrams.
+     * 
+     */
+
+    public static int makeAnagram(String a, String b) {
+        // Write your code here
+        int deletion = 0;
+        Map<Character, Integer> mapA = new HashMap<>();
+        Map<Character, Integer> mapB = new HashMap<>();
+        char[] arrA = a.toCharArray();
+        char[] arrB = b.toCharArray();
+        for(int i = 0 ; i < arrA.length ; i++){
+            if(mapA.containsKey(arrA[i]))
+                mapA.put(arrA[i], mapA.get(arrA[i])+1);
+            else
+                mapA.put(arrA[i], 1);
+        }
+        for(int i = 0 ; i < arrB.length ; i++){
+            if(mapB.containsKey(arrB[i]))
+                mapB.put(arrB[i], mapB.get(arrB[i])+1);
+            else
+                mapB.put(arrB[i], 1);
+        }
+        Set<Character> set = new HashSet<>();
+        set.addAll(mapA.keySet());
+        set.addAll(mapB.keySet());
+        for(Character c : set){
+            if(mapA.containsKey(c) && mapB.containsKey(c))
+                deletion = deletion + (mapA.get(c) >= mapB.get(c) ? mapA.get(c)-mapB.get(c) : mapB.get(c)-mapA.get(c));
+            else if(mapA.containsKey(c))
+                deletion = deletion + mapA.get(c);
+            else if(mapB.containsKey(c))
+                deletion = deletion + mapB.get(c);
+        }
+        return deletion;
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        int res = AMZ_Practice.makeAnagram("cde", "abc");
+        System.out.println(res);
+    }
+}
