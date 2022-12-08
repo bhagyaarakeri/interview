@@ -1,0 +1,98 @@
+package general.interview;
+
+public class Game {
+    static String[][] board;
+
+    public static void boardSetup() {
+        board = new String[10][10];
+        for(int i = 0 ; i < 10 ; i++){
+            for(int j = 0 ; j < 10 ; j++){
+                board[i][j] = "0";
+            }
+        }
+        board[3][2] = board[4][2] = board[5][2] = board[6][2] = "B";
+        board[5][5] = board[6][5] = board[3][7] = board[3][8] = "D";
+    }
+
+    public static TurnResult takeTurn(int coordX, int coordY) {
+        if(board[coordX][coordY] != "0"){
+            boolean isSunk = true, isWinner = true;
+            String s = board[coordX][coordY] ;
+            board[coordX][coordY] = "0";
+
+            for(int i = 0 ; i < 10 ; i++){
+                for(int j = 0 ; j < 10 ; j++){
+                    if(!board[i][j].equalsIgnoreCase("0")){
+                        isWinner = false;
+                        break;
+                    }
+                }
+            }
+            if(isWinner)
+                return TurnResult.Winner;
+
+            for(int i = 0 ; i < 10 ; i++){
+                if(board[coordX][i].equalsIgnoreCase(s)) {
+                    isSunk = false;
+                    break;
+                }
+            }
+            if(isSunk){
+                for(int i = 0 ; i < 10 ; i++){
+                    if(board[i][coordY].equalsIgnoreCase(s)){
+                        isSunk = false;
+                        break;
+                    }
+                }
+            }
+            if(isSunk)
+                return TurnResult.ShipSunk;
+            return TurnResult.Hit;
+        } else {
+            return TurnResult.Miss;
+        }
+    }
+    public static void display(){
+        for(int i = 0 ; i < 10 ; i++){
+            for(int j = 0 ; j < 10 ; j++){
+                System.out.printf(board[i][j]+"  ");
+            }
+            System.out.println();
+        }
+    }
+    public static void main(String[] args) {
+        // Set up the board.
+        boardSetup();
+        // Test the code.
+        TurnResult r;
+
+        // Miss
+        display();
+        r = takeTurn(1, 1);
+        //display();
+        System.out.println(r);
+
+        // Hit
+        r = takeTurn(5, 5);
+        //display();
+        System.out.println(r);
+
+        // ShipSunk
+        r = takeTurn(6, 5);
+        //display();
+        System.out.println(r);
+
+        r = takeTurn(3, 7);
+        System.out.println(r);
+
+        r = takeTurn(3, 8);
+        System.out.println(r);
+        display();
+    }
+}
+enum TurnResult {
+    Miss,
+    Hit,
+    ShipSunk,
+    Winner
+}
