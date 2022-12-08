@@ -1,0 +1,42 @@
+package general.interview;
+
+public class VersionCompare {
+    public static void main(String[] args) {
+        System.out.println(compareVersion("2", "11"));
+        System.out.println(compareVersion("sd", "df"));
+        System.out.println(compareVersion("1", "1.2"));
+        System.out.println(compareVersion("2.2", "2"));
+        System.out.println(compareVersion("10.2.3", "2.5.8"));
+        System.out.println(compareVersion("sd.3", "df.7"));
+        System.out.println(compareVersion("5", "df"));
+        System.out.println(compareVersion("sd.3", ""));
+        System.out.println(compareVersion("sd.3", null));
+    }
+
+    public static boolean compareVersion(String v1, String v2) {
+        if(v1 == null || v2 == null)
+            return false;
+        String[] arrV1 = v1.split("\\.");
+        String[] arrV2 = v2.split("\\.");
+        int count1 = 0, count2 = 0;
+        while (count1 < arrV1.length && count2 < arrV2.length) {
+            try {
+                int a = Integer.parseInt(arrV1[count1]);
+                int b = Integer.parseInt(arrV2[count2]);
+                if (a < b)
+                    return true;
+                if (a > b)
+                    return false;
+            } catch (Exception e) {
+                return v1.compareTo(v2) < 0;
+            }
+            count1++;
+            count2++;
+        }
+        if (count1 >= arrV1.length)
+            return true;
+        if (count2 >= arrV2.length)
+            return false;
+        return false;
+    }
+}
